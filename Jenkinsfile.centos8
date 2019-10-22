@@ -10,12 +10,8 @@ pipeline {
   }
   stages {
     stage('Prepare') {
-      parallel {
-        stage('Prepare') {
-          steps {
-            sh 'docker pull ${DOCKER_CI_TOOLS}'
-          }
-        }
+      steps {
+        sh 'docker pull ${DOCKER_CI_TOOLS}'
       }
     }
     stage('Build') {
@@ -40,11 +36,9 @@ pipeline {
         dir(path: 'SRPMS') {
           archiveArtifacts(artifacts: '**/*.src.rpm', caseSensitive: true, onlyIfSuccessful: true, allowEmptyArchive: true)
         }
+        rpmGithubRelease('centos8')
       }
     }
-  }
-  triggers {
-    bitbucketPush()
   }
   post {
     success {

@@ -1,0 +1,7 @@
+{
+  "publish": {
+    "PACKAGE": "golang",
+    "GH_USER": "jc21-rpm",
+    "VERSION": "1.13.3"
+  }
+}

@@ -75,9 +75,15 @@ for SPECFILE in SPECS/*.spec; do
             echo -e "${BLUE}❯ ${YELLOW}Building ${PACKAGE}"
             tput sgr0
 
+            # If centos 8, we want -n option
+            NOBEST=
+            if [ "${CENTOS_VERSION}" == "8" ]; then
+              NOBEST=-n
+            fi
+
             # If cpp11, use a special command
             # This is a convoluted solution I know.
-            DOCKER_COMMAND="/bin/build-spec -o -r /home/rpmbuilder/rpmbuild/DEPS/*/*.rpm -- /home/rpmbuilder/rpmbuild/SPECS/${PACKAGE}.spec"
+            DOCKER_COMMAND="/bin/build-spec ${NOBEST} -o -r /home/rpmbuilder/rpmbuild/DEPS/*/*.rpm -- /home/rpmbuilder/rpmbuild/SPECS/${PACKAGE}.spec"
             ADDITIONAL_MOUNT=""
             if [ "$DOCKER_TAG" == "cpp11" ]; then
                TMPFILE=`mktemp /tmp/rpmbuild.XXXXXXXX`

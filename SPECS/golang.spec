@@ -103,7 +103,7 @@
 %endif
 
 %global go_api 1.13
-%global go_version 1.13.3
+%global go_version 1.13.5
 
 Name:           golang
 Version:        %{go_version}
@@ -578,6 +578,9 @@ fi
 %endif
 
 %changelog
+* Mon Jan 6 2020 Jamie Curnow <jc@jc21.com> - 1.13.5-1
+- v1.13.5
+
 * Tue Oct 22 2019 Jamie Curnow <jc@jc21.com> - 1.13.3-1
 - v1.13.3
 - Modified to include download during build

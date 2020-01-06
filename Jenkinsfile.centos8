@@ -17,7 +17,7 @@ pipeline {
     stage('Build') {
       steps {
         ansiColor('xterm') {
-          sh './build 8'
+          sh './build 8 golang'
         }
       }
     }

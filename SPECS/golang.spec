@@ -310,7 +310,10 @@ Requires(preun): %{_sbindir}/update-alternatives
 # This is an odd issue, still looking for a better fix.
 Requires:       glibc
 Requires:       gcc
+%if 0%{rhel} > 7
 Recommends:     git, subversion, mercurial
+%endif
+
 %description    bin
 %{summary}
 

@@ -1,4 +1,3 @@
-%define debug_package %{nil}
 %bcond_with bootstrap
 # temporalily ignore test failures
 %ifarch %{ix86} aarch64 %{arm}
@@ -32,6 +31,9 @@
   /usr/lib/rpm/brp-compress
 
 %global golibdir %{_libdir}/golang
+
+# This macro may not always be defined, ensure it is
+%{!?gopath: %global gopath %{_datadir}/gocode}
 
 # Golang build options.
 
@@ -106,12 +108,15 @@
 %global go_version 1.13.5
 
 Name:           golang
-Version:        %{go_version}
+Version:        1.13.5
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
 URL:            http://golang.org/
+Source0:        https://storage.googleapis.com/golang/go%{go_version}.src.tar.gz
+# make possible to override default traceback level at build time by setting build tag rpm_crashtraceback
+Source1:        fedora.go
 
 # The compiler is written in Go. Needs go(1.4+) compiler for build.
 %if !%{golang_bootstrap}
@@ -226,6 +231,9 @@ Obsoletes:      %{name}-data < 1.1.1-4
 Obsoletes:      %{name}-vim < 1.4
 Obsoletes:      emacs-%{name} < 1.4
 
+# These are the only RHEL/Fedora architectures that we compile this package for
+ExclusiveArch:  %{golang_arches}
+
 Source100:      golang-gdbinit
 
 %description
@@ -264,6 +272,8 @@ BuildArch:      noarch
 
 %package        bin
 Summary:        Golang core compiler tools
+# Some distributions refer to this package by this name
+Provides:       %{name}-go = %{version}-%{release}
 Requires:       go = %{version}-%{release}
 # Pre-go1.5, all arches had to be bootstrapped individually, before usable, and
 # env variables to compile for the target os-arch.
@@ -300,6 +310,7 @@ Requires(preun): %{_sbindir}/update-alternatives
 # This is an odd issue, still looking for a better fix.
 Requires:       glibc
 Requires:       gcc
+Recommends:     git, subversion, mercurial
 %description    bin
 %{summary}
 
@@ -332,16 +343,11 @@ Requires:       %{name} = %{version}-%{release}
 %endif
 
 %prep
-wget https://dl.google.com/go/go%{version}.src.tar.gz
-tar -xzf go%{version}.src.tar.gz
-cd go
+%autosetup -p1 -n go
 
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
+cp %{SOURCE1} ./src/runtime/
 
 %build
-cd go
 # print out system information
 uname -a
 cat /proc/cpuinfo
@@ -387,7 +393,6 @@ GOROOT=$(pwd) PATH=$(pwd)/bin:$PATH go install -race -v -x std
 %endif
 
 %install
-cd go
 rm -rf $RPM_BUILD_ROOT
 # remove GC build cache
 rm -rf pkg/obj/go-build/*
@@ -442,7 +447,7 @@ pushd $RPM_BUILD_ROOT%{goroot}
         echo "%%{goroot}/$file" >> $shared_list
         echo "%%{golibdir}/$(basename $file)" >> $shared_list
     done
-
+    
     find pkg/*_dynlink/ -type d -printf '%%%dir %{goroot}/%p\n' >> $shared_list
     find pkg/*_dynlink/ ! -type d -printf '%{goroot}/%p\n' >> $shared_list
 %endif
@@ -489,7 +494,6 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/gdbinit.d
 cp -av %{SOURCE100} $RPM_BUILD_ROOT%{_sysconfdir}/gdbinit.d/golang.gdb
 
 %check
-cd go
 export GOROOT=$(pwd -P)
 export PATH="$GOROOT"/bin:"$PATH"
 cd src
@@ -527,21 +531,18 @@ fi
 
 
 %files
-%doc go/AUTHORS go/CONTRIBUTORS go/LICENSE go/PATENTS
+%license LICENSE PATENTS
+%doc AUTHORS CONTRIBUTORS
 # VERSION has to be present in the GOROOT, for `go install std` to work
 %doc %{goroot}/VERSION
 %dir %{goroot}/doc
-%doc %{goroot}/doc/*
 
 # go files
 %dir %{goroot}
-%exclude %{goroot}/bin/
-%exclude %{goroot}/pkg/
-%exclude %{goroot}/src/
-%exclude %{goroot}/doc/
-%exclude %{goroot}/misc/
-%exclude %{goroot}/test/
-%{goroot}/*
+%{goroot}/api/
+%{goroot}/lib/time/
+%{goroot}/favicon.ico
+%{goroot}/robots.txt
 
 # ensure directory ownership, so they are cleaned up if empty
 %dir %{gopath}
@@ -557,33 +558,43 @@ fi
 # gdbinit (for gdb debugging)
 %{_sysconfdir}/gdbinit.d
 
-%files -f go/go-src.list src
+%files src -f go-src.list
 
-%files -f go/go-docs.list docs
+%files docs -f go-docs.list
 
-%files -f go/go-misc.list misc
+%files misc -f go-misc.list
 
-%files -f go/go-tests.list tests
+%files tests -f go-tests.list
 
-%files -f go/go-pkg.list bin
+%files bin -f go-pkg.list
 %{_bindir}/go
 %{_bindir}/gofmt
+%{goroot}/bin/linux_%{gohostarch}/go
+%{goroot}/bin/linux_%{gohostarch}/gofmt
 
 %if %{shared}
-%files -f go/go-shared.list shared
+%files shared -f go-shared.list
 %endif
 
 %if %{race}
-%files -f go/go-race.list race
+%files race -f go-race.list
 %endif
 
 %changelog
-* Mon Jan 6 2020 Jamie Curnow <jc@jc21.com> - 1.13.5-1
-- v1.13.5
+* Thu Dec 05 2019 Jakub Čajka <jcajka@redhat.com> - 1.13.5-1
+- Rebase to go1.13.5
 
-* Tue Oct 22 2019 Jamie Curnow <jc@jc21.com> - 1.13.3-1
-- v1.13.3
-- Modified to include download during build
+* Tue Nov 26 2019 Neal Gompa <ngompa@datto.com> - 1.13.4-2
+- Small fixes to the spec and tighten up the file list
+
+* Fri Nov 01 2019 Jakub Čajka <jcajka@redhat.com> - 1.13.4-1
+- Rebase to go1.13.4
+- Resolves BZ#1767673
+
+* Sat Oct 19 2019 Jakub Čajka <jcajka@redhat.com> - 1.13.3-1
+- Rebase to go1.13.3
+- Fix for CVE-2019-17596
+- Resolves: BZ#1755639, BZ#1763312
 
 * Fri Sep 27 2019 Jakub Čajka <jcajka@redhat.com> - 1.13.1-1
 - Rebase to go1.13.1

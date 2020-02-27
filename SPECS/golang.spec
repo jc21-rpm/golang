@@ -104,11 +104,11 @@
 %global gohostarch  s390x
 %endif
 
-%global go_api 1.13
-%global go_version 1.13.8
+%global go_api 1.14
+%global go_version 1.14
 
 Name:           golang
-Version:        1.13.8
+Version:        1.14
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -310,10 +310,7 @@ Requires(preun): %{_sbindir}/update-alternatives
 # This is an odd issue, still looking for a better fix.
 Requires:       glibc
 Requires:       gcc
-%if 0%{rhel} > 7
 Recommends:     git, subversion, mercurial
-%endif
-
 %description    bin
 %{summary}
 
@@ -450,7 +447,7 @@ pushd $RPM_BUILD_ROOT%{goroot}
         echo "%%{goroot}/$file" >> $shared_list
         echo "%%{golibdir}/$(basename $file)" >> $shared_list
     done
-    
+
     find pkg/*_dynlink/ -type d -printf '%%%dir %{goroot}/%p\n' >> $shared_list
     find pkg/*_dynlink/ ! -type d -printf '%{goroot}/%p\n' >> $shared_list
 %endif
@@ -584,8 +581,23 @@ fi
 %endif
 
 %changelog
-* Mon Feb 17 2020 Jakub Čajka <jc@jc21.com> - 1.13.8-1
-- v1.13.8
+* Wed Feb 26 2020 Jakub Čajka <jcajka@redhat.com> - 1.14-1
+- Rebase to go1.14 proper
+- Resolves: BZ#1792475
+
+* Thu Feb 06 2020 Jakub Čajka <jcajka@redhat.com> - 1.14-0.rc1.0
+- Rebase to go1.14.rc1
+- Related: BZ#1792475
+
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.14-0.beta1.0.1
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Mon Jan 20 2020 Jakub Čajka <jcajka@redhat.com> - 1.14-0.beta1.0
+- Rebase to go1.14beta1
+- Resolves: BZ#1792475
+
+* Mon Jan 13 2020 Jakub Čajka <jcajka@redhat.com> - 1.13.6-1
+- Rebase to go1.13.6
 
 * Thu Dec 05 2019 Jakub Čajka <jcajka@redhat.com> - 1.13.5-1
 - Rebase to go1.13.5

@@ -104,11 +104,11 @@
 %global gohostarch  s390x
 %endif
 
-%global go_api 1.14
-%global go_version 1.14
+%global go_api 1.15
+%global go_version 1.15
 
 Name:           golang
-Version:        1.14.7
+Version:        1.15.7
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -583,6 +583,9 @@ fi
 %endif
 
 %changelog
+* Wed Aug 12 2020 Jamie Curnow <jc@jc21.com> - 1.15.0-1
+- v1.15.0
+
 * Mon Aug 10 2020 Jamie Curnow <jc@jc21.com> - 1.14.7-1
 - v1.14.7
 

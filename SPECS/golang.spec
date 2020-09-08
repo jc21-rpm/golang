@@ -108,7 +108,7 @@
 %global go_version 1.15
 
 Name:           golang
-Version:        1.15.7
+Version:        1.15.1
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -583,6 +583,9 @@ fi
 %endif
 
 %changelog
+* Tue Sep 8 2020 Jamie Curnow <jc@jc21.com> - 1.15.1-1
+- v1.15.1
+
 * Wed Aug 12 2020 Jamie Curnow <jc@jc21.com> - 1.15.0-1
 - v1.15.0
 

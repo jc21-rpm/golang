@@ -105,7 +105,7 @@
 %endif
 
 %global go_api 1.15
-%global go_version 1.15.4
+%global go_version 1.15.5
 
 Name:           golang
 Version:        %{go_version}
@@ -583,6 +583,9 @@ fi
 %endif
 
 %changelog
+* Tue Nov 17 2020 Jamie Curnow <jc@jc21.com> - 1.15.5-1
+- v1.15.5
+
 * Tue Nov 10 2020 Jamie Curnow <jc@jc21.com> - 1.15.4-1
 - v1.15.4
 

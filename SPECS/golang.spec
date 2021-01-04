@@ -108,7 +108,7 @@
 %endif
 
 %global go_api 1.15
-%global go_version 1.15.5
+%global go_version 1.15.6
 
 Name:           golang
 Version:        %{go_version}
@@ -610,6 +610,8 @@ fi
 %endif
 
 %changelog
+* Mon Jan 4 2021 Jamie Curnow <jc@jc21.com> - 1.15.6-1
+
 * Fri Nov 13 2020 Jakub Čajka <jcajka@redhat.com> - 1.15.5-1
 - Rebase to go1.15.5
 - Security fix for CVE-2020-28362, CVE-2020-28367 and CVE-2020-28366

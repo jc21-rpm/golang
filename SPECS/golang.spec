@@ -108,7 +108,7 @@
 %endif
 
 %global go_api 1.15
-%global go_version 1.15.6
+%global go_version 1.15.7
 
 Name:           golang
 Version:        %{go_version}
@@ -610,7 +610,11 @@ fi
 %endif
 
 %changelog
+* Thu Jan 28 2021 Jamie Curnow <jc@jc21.com> - 1.15.7-1
+- v1.15.7
+
 * Mon Jan 4 2021 Jamie Curnow <jc@jc21.com> - 1.15.6-1
+- v1.15.6
 
 * Fri Nov 13 2020 Jakub Čajka <jcajka@redhat.com> - 1.15.5-1
 - Rebase to go1.15.5

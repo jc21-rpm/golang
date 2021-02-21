@@ -1,4 +1,4 @@
-From b38cd2374c2395f5a77802ef8ea3d7ac5b8a86ad Mon Sep 17 00:00:00 2001
+From fa250374b727439159bc9f203b854bb5df00186f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Jakub=20=C4=8Cajka?= <jcajka@redhat.com>
 Date: Mon, 27 May 2019 15:12:53 +0200
 Subject: [PATCH 3/3] cmd/go: disable Google's proxy and sumdb
@@ -9,10 +9,10 @@ Subject: [PATCH 3/3] cmd/go: disable Google's proxy and sumdb
  2 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/src/cmd/go/internal/cfg/cfg.go b/src/cmd/go/internal/cfg/cfg.go
-index 61dc6bdda6..e8658dc56c 100644
+index 9bc48132ae..d5be72473f 100644
 --- a/src/cmd/go/internal/cfg/cfg.go
 +++ b/src/cmd/go/internal/cfg/cfg.go
-@@ -245,11 +245,11 @@ var (
+@@ -262,11 +262,11 @@ var (
  	GOPPC64  = envOr("GOPPC64", fmt.Sprintf("%s%d", "power", objabi.GOPPC64))
  	GOWASM   = envOr("GOWASM", fmt.Sprint(objabi.GOWASM))
  
@@ -27,10 +27,10 @@ index 61dc6bdda6..e8658dc56c 100644
 +	GONOPROXY = envOr("GONOPROXY", GOPRIVATE)
 +	GONOSUMDB = envOr("GONOSUMDB", GOPRIVATE)
  	GOINSECURE = Getenv("GOINSECURE")
+ 	GOVCS      = Getenv("GOVCS")
  )
- 
 diff --git a/src/cmd/go/testdata/script/mod_sumdb_golang.txt b/src/cmd/go/testdata/script/mod_sumdb_golang.txt
-index 40a07fc7e9..50436e32d7 100644
+index cc0b0da474..b50689e209 100644
 --- a/src/cmd/go/testdata/script/mod_sumdb_golang.txt
 +++ b/src/cmd/go/testdata/script/mod_sumdb_golang.txt
 @@ -2,12 +2,12 @@
@@ -47,8 +47,8 @@ index 40a07fc7e9..50436e32d7 100644
 -stdout '^sum.golang.org$'
 +stdout '^off$'
  
- # download direct from github
+ # Download direct from github.
  [!net] skip
 -- 
-2.21.0
+2.26.2
 

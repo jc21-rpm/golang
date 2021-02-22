@@ -119,6 +119,9 @@ Version:        1.16
 Release:        %{?go_prerelease:0.%{go_prerelease}.}%{baserelease}%{?dist}
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
+Group:          Applications/System
+Vendor:         jc21.com
+Packager:       jc21.com
 License:        BSD and Public Domain
 URL:            http://golang.org/
 Source0:        https://storage.googleapis.com/golang/go%{go_version}.src.tar.gz

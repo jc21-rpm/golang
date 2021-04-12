@@ -1,19 +1,6 @@
-From f3d446b60a082308ec5aaa2fdc36e31f566081bb Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Jakub=20=C4=8Cajka?= <jcajka@redhat.com>
-Date: Thu, 22 Mar 2018 11:49:09 +0100
-Subject: [PATCH 1/3] Don't use the bundled tzdata at runtime, except for the
- internal test suite
-
----
- src/time/internal_test.go | 7 +++++--
- src/time/zoneinfo_test.go | 3 ++-
- src/time/zoneinfo_unix.go | 2 --
- 3 files changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/src/time/internal_test.go b/src/time/internal_test.go
-index 35ce69b228..1cea04ed7e 100644
---- a/src/time/internal_test.go
-+++ b/src/time/internal_test.go
+diff -up go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/internal_test.go.time go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/internal_test.go
+--- go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/internal_test.go.time	2017-12-05 01:10:10.000000000 +0100
++++ go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/internal_test.go	2017-12-05 14:55:10.574637475 +0100
 @@ -4,13 +4,15 @@
  
  package time
@@ -42,11 +29,10 @@ index 35ce69b228..1cea04ed7e 100644
  	if zipOnly {
  		zoneSources = zoneSources[len(zoneSources)-1:]
  	}
-diff --git a/src/time/zoneinfo_test.go b/src/time/zoneinfo_test.go
-index 277b68f798..be2aa6c687 100644
---- a/src/time/zoneinfo_test.go
-+++ b/src/time/zoneinfo_test.go
-@@ -9,6 +9,7 @@ import (
+diff -up go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/zoneinfo_test.go.time go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/zoneinfo_test.go
+--- go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/zoneinfo_test.go.time	2017-12-05 01:10:10.000000000 +0100
++++ go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/zoneinfo_test.go	2017-12-05 14:58:09.823109248 +0100
+@@ -8,6 +8,7 @@ import (
  	"fmt"
  	"os"
  	"reflect"
@@ -54,7 +40,7 @@ index 277b68f798..be2aa6c687 100644
  	"testing"
  	"time"
  )
-@@ -139,7 +140,7 @@ func TestLoadLocationFromTZData(t *testing.T) {
+@@ -128,7 +129,7 @@ func TestLoadLocationFromTZData(t *testi
  		t.Fatal(err)
  	}
  
@@ -63,10 +49,9 @@ index 277b68f798..be2aa6c687 100644
  	if err != nil {
  		t.Fatal(err)
  	}
-diff --git a/src/time/zoneinfo_unix.go b/src/time/zoneinfo_unix.go
-index d2465eef65..b8c934c9a9 100644
---- a/src/time/zoneinfo_unix.go
-+++ b/src/time/zoneinfo_unix.go
+diff -up go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/zoneinfo_unix.go.time go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/zoneinfo_unix.go
+--- go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/zoneinfo_unix.go.time	2017-12-05 01:10:10.000000000 +0100
++++ go-dd7cbf3a846c2cb125ac65173abaf6a8b9f903ff/src/time/zoneinfo_unix.go	2017-12-05 14:55:10.574637475 +0100
 @@ -12,7 +12,6 @@
  package time
  
@@ -83,6 +68,3 @@ index d2465eef65..b8c934c9a9 100644
  }
  
  func initLocal() {
--- 
-2.26.2
-

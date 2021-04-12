@@ -1,0 +1,13 @@
+diff --git a/src/cmd/go/testdata/script/list_std.txt b/src/cmd/go/testdata/script/list_std.txt
+index 6ab1bd1674..4a00e436fd 100644
+--- a/src/cmd/go/testdata/script/list_std.txt
++++ b/src/cmd/go/testdata/script/list_std.txt
+@@ -6,7 +6,7 @@ env GO111MODULE=off
+ # Listing GOROOT should only find standard packages.
+ cd $GOROOT/src
+ go list -f '{{if not .Standard}}{{.ImportPath}}{{end}}' ./...
+-! stdout .
++stdout _$GOROOT
+ 
+ # Standard packages should include cmd, but not cmd/vendor.
+ go list ./...

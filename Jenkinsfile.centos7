@@ -6,7 +6,7 @@ pipeline {
     disableConcurrentBuilds()
   }
   agent {
-    label 'rpm'
+    label 'rpmbuild'
   }
   stages {
     stage('Prepare') {

@@ -107,7 +107,7 @@
 %endif
 
 %global go_api 1.17
-%global go_version 1.17.2
+%global go_version 1.17.3
 
 # For rpmdev-bumpspec and releng automation
 %global baserelease 2
@@ -535,6 +535,9 @@ fi
 %endif
 
 %changelog
+* Tue Nov 30 2021 Jamie Curnow <jc@jc21.com> - 1.17.3-1
+- v1.17.3
+
 * Mon Oct 11 2021 Jamie Curnow <jc@jc21.com> - 1.17.2-1
 - v1.17.2
 

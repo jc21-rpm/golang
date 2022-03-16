@@ -106,11 +106,11 @@
 %global gohostarch  s390x
 %endif
 
-%global go_api 1.17
-%global go_version 1.17.3
+%global go_api 1.18
+%global go_version 1.18
 
 # For rpmdev-bumpspec and releng automation
-%global baserelease 2
+%global baserelease 1
 
 Name:           golang
 Version:        %{go_version}
@@ -156,9 +156,9 @@ Requires:       %{name}-bin = %{version}-%{release}
 Requires:       %{name}-src = %{version}-%{release}
 Requires:       go-srpm-macros
 
-Patch1:       0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
-Patch2:       0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
-Patch3:       0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
+#Patch1:       0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
+#Patch2:       0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
+#Patch3:       0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
 
 # Having documentation separate was broken
 Obsoletes:      %{name}-docs < 1.1-4
@@ -457,12 +457,6 @@ export GO_LDFLAGS="-linkmode internal"
 %if !%{cgo_enabled} || !%{external_linker}
 export CGO_ENABLED=0
 %endif
-# workaround for https://github.com/golang/go/issues/39466 until it gests fixed
-# Commented until the patch is ready, this workaround suggested in the link above
-# doesn't work properly
-#ifarch aarch64
-#export CGO_CFLAGS="-mno-outline-atomics"
-#endif
 
 # make sure to not timeout
 export GO_TEST_TIMEOUT_SCALE=2
@@ -535,6 +529,9 @@ fi
 %endif
 
 %changelog
+* Wed Mar 16 2022 Jamie Curnow <jc@jc21.com> - 1.18-1
+- v1.18
+
 * Tue Nov 30 2021 Jamie Curnow <jc@jc21.com> - 1.17.3-1
 - v1.17.3
 

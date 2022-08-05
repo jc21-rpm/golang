@@ -106,8 +106,9 @@
 %global gohostarch  s390x
 %endif
 
-%global go_api 1.18
-%global go_version 1.18
+%global go_api 1.19
+%global go_version 1.19
+# add .x to the go_version, not the go_api, in future
 
 # For rpmdev-bumpspec and releng automation
 %global baserelease 1
@@ -482,7 +483,6 @@ fi
 
 %files
 %license LICENSE PATENTS
-%doc AUTHORS CONTRIBUTORS
 # VERSION has to be present in the GOROOT, for `go install std` to work
 %doc %{goroot}/VERSION
 %dir %{goroot}/doc
@@ -529,6 +529,12 @@ fi
 %endif
 
 %changelog
+* Fri Aug 5 2022 Jamie Curnow <jc@jc21.com> - 1.19-1
+- v1.19
+
+* Tue Jul 19 2022 Jamie Curnow <jc@jc21.com> - 1.18.4-1
+- v1.18.4
+
 * Wed Mar 16 2022 Jamie Curnow <jc@jc21.com> - 1.18-1
 - v1.18
 

@@ -107,7 +107,7 @@
 %endif
 
 %global go_api 1.19
-%global go_version 1.19.4
+%global go_version 1.19.5
 # add .x to the go_version, not the go_api, in future
 
 # For rpmdev-bumpspec and releng automation
@@ -529,6 +529,9 @@ fi
 %endif
 
 %changelog
+* Thu Jan 12 2023 Jamie Curnow <jc@jc21.com> - 1.19.5-1
+- v1.19.5
+
 * Wed Dec 14 2022 Jamie Curnow <jc@jc21.com> - 1.19.4-1
 - v1.19.4
 

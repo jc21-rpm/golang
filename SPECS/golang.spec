@@ -105,7 +105,7 @@
 # Comment out go_prerelease and go_patch as needed
 %global go_api 1.20
 #global go_prerelease rc3
-%global go_patch 6
+%global go_patch 7
 
 %global go_version %{go_api}%{?go_patch:.%{go_patch}}%{?go_prerelease:~%{go_prerelease}}
 %global go_source %{go_api}%{?go_patch:.%{go_patch}}%{?go_prerelease}
@@ -535,6 +535,9 @@ fi
 %endif
 
 %changelog
+* Thu Aug 3 2023 Jamie Curnow <jc@jc21.com> - 1.20.7-1
+- Update to go1.20.7
+
 * Mon Jul 31 2023 Jamie Curnow <jc@jc21.com> - 1.20.6-1
 - Update to go1.20.6
 

@@ -23,93 +23,93 @@ RESET='\E[0m'
 
 CENTOS_VERSION=$1
 if [ "$CENTOS_VERSION" == "" ]; then
-    echo -e "${RED}ERROR: You must specify a Centos version to build for, either 7 or 8"
-    echo -e "ie: ./build 7${RESET}"
-    exit 1
+	echo -e "${RED}ERROR: You must specify a Centos version to build for"
+	echo -e "ie: ./build 8${RESET}"
+	exit 1
 fi
 
 DOCKER_TAG=$2
 if [ "$DOCKER_TAG" == "" ]; then
-    DOCKER_TAG=latest
+	DOCKER_TAG=latest
 fi
 
 SPECIFIC_SPEC_FILE=$3
 
 # Loop over all Specs in the SPECS folder
 for SPECFILE in SPECS/*.spec; do
-    PACKAGE=${SPECFILE#"SPECS/"}
-    PACKAGE=${PACKAGE%".spec"}
+	PACKAGE=${SPECFILE#"SPECS/"}
+	PACKAGE=${PACKAGE%".spec"}
 
-    if [ "${SPECIFIC_SPEC_FILE}" == "" ] || [ "${SPECIFIC_SPEC_FILE}" == "${PACKAGE}" ]; then
-        echo -e "${BLUE}❯ ${GREEN}Building ${CYAN}${PACKAGE} ${GREEN}for Centos ${CENTOS_VERSION}${RESET}"
+	if [ "${SPECIFIC_SPEC_FILE}" == "" ] || [ "${SPECIFIC_SPEC_FILE}" == "${PACKAGE}" ]; then
+		echo -e "${BLUE}❯ ${GREEN}Building ${CYAN}${PACKAGE} ${GREEN}for Centos ${CENTOS_VERSION}${RESET}"
 
-        # Make sure docker exists
-        if hash docker 2>/dev/null; then
-            # Generate a Docker image based on env vars and centos version, for use both manually and in CI
-            eval "DOCKER_IMAGE=\$\{DOCKER_RPMBUILD_EL${CENTOS_VERSION}:-jc21/rpmbuild-centos${CENTOS_VERSION}\}"
-            eval "DOCKER_IMAGE=${DOCKER_IMAGE}"
+		# Make sure docker exists
+		if hash docker 2>/dev/null; then
+			# Generate a Docker image based on env vars and centos version, for use both manually and in CI
+			eval "DOCKER_IMAGE=\$\{DOCKER_RPMBUILD_EL${CENTOS_VERSION}:-jc21/rpmbuild-centos${CENTOS_VERSION}\}"
+			eval "DOCKER_IMAGE=${DOCKER_IMAGE}"
 
-            # Folder setup
-            echo -e "${BLUE}❯ ${YELLOW}Folder setup${RESET}"
-            rm -rf RPMS/* SRPMS/*
-            mkdir -p {RPMS,SRPMS,DEPS,SPECS,SOURCES}
-            chmod -R 777 {RPMS,SRPMS}
+			# Folder setup
+			echo -e "${BLUE}❯ ${YELLOW}Folder setup${RESET}"
+			rm -rf RPMS/* SRPMS/*
+			mkdir -p {RPMS,SRPMS,DEPS,SPECS,SOURCES}
+			chmod -R 777 {RPMS,SRPMS}
 
-            # Pull latest builder image
-            echo -e "${BLUE}❯ ${YELLOW}Pulling docker image: ${DOCKER_IMAGE}:${DOCKER_TAG}${RESET}"
-            docker pull "${DOCKER_IMAGE}:${DOCKER_TAG}"
+			# Pull latest builder image
+			echo -e "${BLUE}❯ ${YELLOW}Pulling docker image: ${DOCKER_IMAGE}:${DOCKER_TAG}${RESET}"
+			docker pull "${DOCKER_IMAGE}:${DOCKER_TAG}"
 
-            # Use the build to change the ownership of folders
-            echo -e "${BLUE}❯ ${YELLOW}Temporarily changing ownership${RESET}"
-            docker run --rm \
-              -v "${CWD}:/home/rpmbuilder/rpmbuild" \
-              "${DOCKER_IMAGE}:${DOCKER_TAG}" \
-              sudo chown -R rpmbuilder:rpmbuilder /home/rpmbuilder/rpmbuild
+			# Use the build to change the ownership of folders
+			echo -e "${BLUE}❯ ${YELLOW}Temporarily changing ownership${RESET}"
+			docker run --rm \
+				-v "${CWD}:/home/rpmbuilder/rpmbuild" \
+				"${DOCKER_IMAGE}:${DOCKER_TAG}" \
+				sudo chown -R rpmbuilder:rpmbuilder /home/rpmbuilder/rpmbuild
 
-            # Do the build
-            echo -e "${BLUE}❯ ${YELLOW}Building ${PACKAGE}${RESET}"
+			# Do the build
+			echo -e "${BLUE}❯ ${YELLOW}Building ${PACKAGE}${RESET}"
 
-            DISABLE_MIRROR=
-            if [ -n "$NOMIRROR" ]; then
-                DISABLE_MIRROR=-m
-            fi
+			DISABLE_MIRROR=
+			if [ -n "$NOMIRROR" ]; then
+				DISABLE_MIRROR=-m
+			fi
 
-            # If centos 8, we want -n option
-            NOBEST=
-            if [ "${CENTOS_VERSION}" == "8" ]; then
-              NOBEST=-n
-            fi
+			# If centos 8, we want -n option
+			NOBEST=
+			if [ "${CENTOS_VERSION}" == "8" ]; then
+			  NOBEST=-n
+			fi
 
-            # Docker Run
-            RPMBUILD=/home/rpmbuilder/rpmbuild
-            docker run --rm \
-              --name "rpmbuild-${BUILD_TAG:-centos${CENTOS_VERSION}-${PACKAGE}}" \
-              -v "${CWD}/DEPS:${RPMBUILD}/DEPS" \
-              -v "${CWD}/RPMS:${RPMBUILD}/RPMS" \
-              -v "${CWD}/SRPMS:${RPMBUILD}/SRPMS" \
-              -v "${CWD}/SPECS:${RPMBUILD}/SPECS" \
-              -v "${CWD}/SOURCES:${RPMBUILD}/SOURCES" \
-              -e "GOPROXY=${GOPROXY}" \
-              "${DOCKER_IMAGE}:${DOCKER_TAG}" \
-              /bin/build-spec ${DISABLE_MIRROR} ${NOBEST} -o -r /home/rpmbuilder/rpmbuild/DEPS/*/*.rpm -- "/home/rpmbuilder/rpmbuild/SPECS/${PACKAGE}.spec"
+			# Docker Run
+			RPMBUILD=/home/rpmbuilder/rpmbuild
+			docker run --rm \
+				--name "rpmbuild-${BUILD_TAG:-centos${CENTOS_VERSION}-${PACKAGE}}" \
+				-v "${CWD}/DEPS:${RPMBUILD}/DEPS" \
+				-v "${CWD}/RPMS:${RPMBUILD}/RPMS" \
+				-v "${CWD}/SRPMS:${RPMBUILD}/SRPMS" \
+				-v "${CWD}/SPECS:${RPMBUILD}/SPECS" \
+				-v "${CWD}/SOURCES:${RPMBUILD}/SOURCES" \
+				-e "GOPROXY=${GOPROXY}" \
+				"${DOCKER_IMAGE}:${DOCKER_TAG}" \
+				/bin/build-spec ${DISABLE_MIRROR} ${NOBEST} -o -r /home/rpmbuilder/rpmbuild/DEPS/*/*.rpm -- "/home/rpmbuilder/rpmbuild/SPECS/${PACKAGE}.spec"
 
-            BUILD_SUCCESS=$?
+			BUILD_SUCCESS=$?
 
-            # Change ownership back
-            echo -e "${BLUE}❯ ${YELLOW}Reverting ownership${RESET}"
-            docker run --rm \
-              -v "${CWD}:/home/rpmbuilder/rpmbuild" \
-              "${DOCKER_IMAGE}:${DOCKER_TAG}" \
-              sudo chown -R "$(id -u):$(id -g)" /home/rpmbuilder/rpmbuild
+			# Change ownership back
+			echo -e "${BLUE}❯ ${YELLOW}Reverting ownership${RESET}"
+			docker run --rm \
+				-v "${CWD}:/home/rpmbuilder/rpmbuild" \
+				"${DOCKER_IMAGE}:${DOCKER_TAG}" \
+				sudo chown -R "$(id -u):$(id -g)" /home/rpmbuilder/rpmbuild
 
-            # do we need to exit the loop?
-            if [ $BUILD_SUCCESS -ne 0 ]; then
-                echo -e "${BLUE}❯ ${RED}Exiting due to error${RESET}"
-                exit ${BUILD_SUCCESS}
-            fi
-        else
-            echo -e "${RED}ERROR: Docker command is not available${RESET}"
-            exit 1
-        fi
-    fi
+			# do we need to exit the loop?
+			if [ $BUILD_SUCCESS -ne 0 ]; then
+				echo -e "${BLUE}❯ ${RED}Exiting due to error${RESET}"
+				exit ${BUILD_SUCCESS}
+			fi
+		else
+			echo -e "${RED}ERROR: Docker command is not available${RESET}"
+			exit 1
+		fi
+	fi
 done

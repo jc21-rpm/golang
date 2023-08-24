@@ -1,6 +1,6 @@
 # [golang](https://golang.org)
 
-Builds for Centos 7/8 hosted on [yum.jc21.com](https://yum.jc21.com)
+Build for Redhat based distros hosted on [yum.jc21.com](https://yum.jc21.com)
 
 ### Building Locally
 
@@ -8,10 +8,6 @@ Builds for Centos 7/8 hosted on [yum.jc21.com](https://yum.jc21.com)
 git clone https://github.com/jc21-rpm/golang.git
 cd  golang
 
-# For centos 7:
-./build 7
-
-# For centos 8:
+# Using centos 8 as building distro:
 ./build 8
 ```
-

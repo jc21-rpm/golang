@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:           golang
-Version:        1.21.0
+Version:        1.21.1
 Release:        1
 Summary:        The Go Programming Language
 License:        BSD and Public Domain
@@ -16,14 +16,11 @@ Source1:        gopath.sh
 
 %prep
 %setup -n go
-# tar -xzf %{SOURCE0}
 
 %install
 install -Dm0644 %{SOURCE1} %{buildroot}/etc/profile.d/gopath.sh
 mkdir -p %{buildroot}/usr/local
 cp -prv %{_builddir}/go %{buildroot}/usr/local/
-# install -Dm0755 %{_builddir}/go %{buildroot}/usr/local/go
-#install -Dm0755 bin/gofmt %{buildroot}%{_bindir}/gofmt
 
 %files
 /usr/local/go/*
@@ -31,5 +28,8 @@ cp -prv %{_builddir}/go %{buildroot}/usr/local/
 %doc LICENSE
 
 %changelog
+* Thu Sep 14 2023 Jamie Curnow <jc@jc21.com> - 1.21.1-1
+- v1.21.1
+
 * Thu Aug 24 2023 Jamie Curnow <jc@jc21.com> - 1.21.0-1
 - v1.21.0

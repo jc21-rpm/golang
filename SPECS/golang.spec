@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:           golang
-Version:        1.22.1
+Version:        1.22.2
 Release:        1
 Summary:        The Go Programming Language
 License:        BSD and Public Domain
@@ -28,6 +28,9 @@ cp -prv %{_builddir}/go %{buildroot}/usr/local/
 %doc LICENSE
 
 %changelog
+* Mon Apr 22 2024 Jamie Curnow <jc@jc21.com> - 1.22.2-1
+- v1.22.2
+
 * Thu Mar 7 2024 Jamie Curnow <jc@jc21.com> - 1.22.1-1
 - v1.22.1
 

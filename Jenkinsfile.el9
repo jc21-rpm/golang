@@ -12,7 +12,7 @@ pipeline {
 	stages {
 		stage('Build') {
 			steps {
-				rpmBuild(8)
+				rpmBuild(9)
 				rpmSign()
 			}
 		}
@@ -24,7 +24,7 @@ pipeline {
 				dir(path: 'SRPMS') {
 					archiveArtifacts(artifacts: '**/*.src.rpm', caseSensitive: true, onlyIfSuccessful: true, allowEmptyArchive: true)
 				}
-				rpmGithubRelease('el8')
+				rpmGithubRelease('el9')
 			}
 		}
 	}

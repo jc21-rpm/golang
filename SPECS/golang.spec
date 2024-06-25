@@ -4,7 +4,7 @@
 
 Name:           golang
 Version:        1.22.4
-Release:        1
+Release:        1%{?dist}
 Summary:        The Go Programming Language
 License:        BSD and Public Domain
 URL:            https://www.shellcheck.net/

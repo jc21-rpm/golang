@@ -2,12 +2,15 @@
 %global _missing_build_ids_terminate_build 0
 %global debug_package %{nil}
 
+# Turn off strip'ng of binaries
+%global __strip /bin/true
+
 Name:           golang
 Version:        1.22.5
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 License:        BSD and Public Domain
-URL:            https://www.shellcheck.net/
+URL:            https://go.dev
 Source:         https://go.dev/dl/go%{version}.linux-amd64.tar.gz
 Source1:        gopath.sh
 

@@ -29,13 +29,8 @@ pipeline {
 		}
 	}
 	post {
-		success {
-			juxtapose event: 'success'
-			printSuccess()
-		}
-		failure {
-			juxtapose event: 'failure'
-			printFailure()
+		always {
+			printResult(true)
 		}
 	}
 }

@@ -6,7 +6,7 @@
 %global __strip /bin/true
 
 Name:           golang
-Version:        1.23.1
+Version:        1.23.2
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 License:        BSD and Public Domain
@@ -31,6 +31,9 @@ cp -prv %{_builddir}/go %{buildroot}/usr/local/
 %doc LICENSE
 
 %changelog
+* Thu Oct 3 2024 Jamie Curnow <jc@jc21.com> - 1.23.2-1
+- v1.23.2
+
 * Fri Sep 6 2024 Jamie Curnow <jc@jc21.com> - 1.23.1-1
 - v1.23.1
 

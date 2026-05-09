@@ -1,3 +1,4 @@
+
 %undefine __brp_mangle_shebangs
 %global _missing_build_ids_terminate_build 0
 %global debug_package %{nil}
@@ -6,7 +7,7 @@
 %global __strip /bin/true
 
 Name:           golang
-Version:        1.26.2
+Version:        1.26.3
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 License:        BSD and Public Domain
@@ -31,6 +32,9 @@ cp -prv %{_builddir}/go %{buildroot}/usr/local/
 %doc LICENSE
 
 %changelog
+* Sat May 9 2026 Jamie Curnow <jc@jc21.com> - 1.26.3-1
+- v1.26.3
+
 * Thu Apr 9 2026 Jamie Curnow <jc@jc21.com> - 1.26.2-1
 - v1.26.2
 

@@ -12,7 +12,7 @@ pipeline {
 	stages {
 		stage('Build') {
 			steps {
-				rpmBuild(10)
+				rpmBuild('rocky10')
 				rpmSign()
 			}
 		}

@@ -8,12 +8,11 @@
 
 Name:           golang
 Version:        1.27.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The Go Programming Language
 License:        BSD and Public Domain
 URL:            https://go.dev
 Source:         https://go.dev/dl/go%{version}.linux-amd64.tar.gz
-Source1:        gopath.sh
 
 %description
 %{summary}.
@@ -22,16 +21,22 @@ Source1:        gopath.sh
 %setup -n go
 
 %install
-install -Dm0644 %{SOURCE1} %{buildroot}/etc/profile.d/gopath.sh
 mkdir -p %{buildroot}/usr/local
 cp -prv %{_builddir}/go %{buildroot}/usr/local/
+mkdir -p %{buildroot}/usr/local/bin
+ln -s /usr/local/go/bin/go %{buildroot}/usr/local/bin/go
+ln -s /usr/local/go/bin/gofmt %{buildroot}/usr/local/bin/gofmt
 
 %files
 /usr/local/go/*
-/etc/profile.d/gopath.sh
+/usr/local/bin/go
+/usr/local/bin/gofmt
 %doc LICENSE
 
 %changelog
+* Wed Sep 23 2026 Jamie Curnow <jc@jc21.com> - 1.27.1-2
+- Symlink go/gofmt into /usr/local/bin instead of relying on /etc/profile.d, since profile.d is not sourced by non-login shells
+
 * Wed Sep 2 2026 Jamie Curnow <jc@jc21.com> - 1.27.1-1
 - v1.27.1
 

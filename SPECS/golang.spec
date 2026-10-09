@@ -7,7 +7,7 @@
 %global __strip /bin/true
 
 Name:           golang
-Version:        1.27.1
+Version:        1.27.2
 Release:        2%{?dist}
 Summary:        The Go Programming Language
 License:        BSD and Public Domain
@@ -34,6 +34,9 @@ ln -s /usr/local/go/bin/gofmt %{buildroot}/usr/local/bin/gofmt
 %doc LICENSE
 
 %changelog
+* Fri Oct 9 2026 Jamie Curnow <jc@jc21.com> - 1.27.2-1
+- v1.27.2
+
 * Wed Sep 23 2026 Jamie Curnow <jc@jc21.com> - 1.27.1-2
 - Symlink go/gofmt into /usr/local/bin instead of relying on /etc/profile.d, since profile.d is not sourced by non-login shells
 

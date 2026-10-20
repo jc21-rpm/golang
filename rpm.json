@@ -3,6 +3,6 @@
   "publish": {
     "PACKAGE": "golang",
     "GH_USER": "jc21-rpm",
-    "VERSION": "1.27.2"
+    "VERSION": "1.27.3"
   }
 }
